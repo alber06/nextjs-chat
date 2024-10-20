@@ -1,9 +1,22 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"],
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript",
+    "plugin:storybook/recommended",
+    "eslint:recommended",
+    "prettier"
+  ],
   "globals": {
     "React": "readonly"
   },
+  "plugins": ["prettier"],
   "rules": {
+    "prettier/prettier": "warn",
     "no-unused-vars": "warn"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.stories.@(ts|tsx|js|jsx|mjs|cjs)"]
+    }
+  ]
 }
