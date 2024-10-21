@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node server.mjs",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_ENV=production node server.mjs",
     "lint": "next lint",
     "prettier": "prettier --write .",
     "storybook": "storybook dev -p 6006",
@@ -13,6 +13,7 @@
     "postinstall": "husky"
   },
   "dependencies": {
+    "@types/uuid": "~10.0.0",
     "@typescript-eslint/parser": "^5.0.1",
     "eslint-config-prettier": "~9.1.0",
     "eslint-plugin-prettier": "~5.2.1",
@@ -20,7 +21,10 @@
     "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",
-    "storybook": "~8.3.6"
+    "socket.io": "~4.8.0",
+    "socket.io-client": "~4.8.0",
+    "storybook": "~8.3.6",
+    "uuid": "~10.0.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "~1.9.0",
