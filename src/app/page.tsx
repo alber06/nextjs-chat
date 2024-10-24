@@ -1,54 +1,42 @@
 'use client'
 
-import { useState } from 'react'
-import { useSocket } from '../hooks/useSocket'
+import { useEffect, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
+import MessageDisplay from '@/components/MessageDisplay/MessageDisplay'
+import MessageForm from '@/components/MessageForm/MessageForm'
+import { Header } from '@/components/Header'
+import { Message } from '@/global/types'
+import { useSocket } from '@/hooks'
 
 export default function Home() {
-  const { isConnected, messages, sendMessage } = useSocket()
-  const [inputMessage, setInputMessage] = useState('')
+  const [messages, setMessages] = useState<Message[]>([])
+  const { isConnected, messages: socketMessages } = useSocket()
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (inputMessage.trim()) {
-      sendMessage(inputMessage)
-      setInputMessage('')
-    }
-  }
+  useEffect(() => {
+    // Process all new socket messages
+    const newMessages = socketMessages.map((msg) => ({
+      ...msg,
+      id: msg.id || uuidv4(),
+      isSent: false
+    }))
+
+    setMessages((prevMessages: Message[]) => {
+      // Filter out any duplicates based on the id
+      const uniqueNewMessages = newMessages.filter(
+        (newMsg) => !prevMessages.some((prevMsg) => prevMsg.id === newMsg.id)
+      )
+
+      return [...prevMessages, ...uniqueNewMessages]
+    })
+  }, [socketMessages, setMessages])
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gray-100">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
-        <h1 className="text-2xl font-bold mb-4 text-center">
-          WebSocket Chat Demo
-        </h1>
-        <div
-          className={`mb-4 text-center ${isConnected ? 'text-green-500' : 'text-red-500'}`}
-        >
-          {isConnected ? 'Connected' : 'Disconnected'}
-        </div>
-        <div className="mb-4 h-64 overflow-y-auto border border-gray-300 rounded p-2">
-          {messages.map((msg, index) => (
-            <p key={index} className="mb-2">
-              {msg}
-            </p>
-          ))}
-        </div>
-        <form onSubmit={handleSubmit} className="flex">
-          <input
-            type="text"
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            className="flex-grow mr-2 p-2 border border-gray-300 rounded"
-            placeholder="Type a message..."
-          />
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            disabled={!isConnected}
-          >
-            Send
-          </button>
-        </form>
+        <Header isConnected={isConnected} />
+
+        <MessageDisplay messages={messages} />
+        <MessageForm isConnected={isConnected} setMessages={setMessages} />
       </div>
     </main>
   )
