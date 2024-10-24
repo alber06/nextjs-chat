@@ -6,7 +6,7 @@ import MessageDisplay from '@/components/MessageDisplay/MessageDisplay'
 import MessageForm from '@/components/MessageForm/MessageForm'
 import { Header } from '@/components/Header'
 import { Message } from '@/global/types'
-import { useSocket } from '@/hooks'
+import useSocket from '@/hooks/useSocket'
 
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([])

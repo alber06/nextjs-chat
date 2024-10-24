@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import { useSocket } from '@/hooks'
+import useSocket from '@/hooks/useSocket'
 import { Message } from '@/global/types'
 
 const MessageForm = ({
