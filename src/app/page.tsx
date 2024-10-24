@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import MessageDisplay from '@/components/MessageDisplay/MessageDisplay'
-import MessageForm from '@/components/MessageForm/MessageForm'
+import { MessageDisplay } from '@/components/MessageDisplay'
+import { MessageForm } from '@/components/MessageForm'
 import { Header } from '@/components/Header'
 import { Message } from '@/global/types'
 import useSocket from '@/hooks/useSocket'
