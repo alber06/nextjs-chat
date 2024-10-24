@@ -1,10 +1,11 @@
+import { Message } from '@/global/types'
 import { useEffect, useState } from 'react'
 import io, { Socket } from 'socket.io-client'
 
-export const useSocket = () => {
+const useSocket = () => {
   const [socket, setSocket] = useState<Socket | null>(null)
   const [isConnected, setIsConnected] = useState(false)
-  const [messages, setMessages] = useState<string[]>([])
+  const [messages, setMessages] = useState<Message[]>([])
 
   useEffect(() => {
     const socketIo = io()
@@ -17,7 +18,7 @@ export const useSocket = () => {
       setIsConnected(false)
     })
 
-    socketIo.on('chat message', (msg: string) => {
+    socketIo.on('chat message', (msg: Message) => {
       setMessages((prevMessages) => [...prevMessages, msg])
     })
 
@@ -28,7 +29,7 @@ export const useSocket = () => {
     }
   }, [])
 
-  const sendMessage = (message: string) => {
+  const sendMessage = (message: Message) => {
     if (socket) {
       socket.emit('chat message', message)
     }
@@ -36,3 +37,5 @@ export const useSocket = () => {
 
   return { isConnected, messages, sendMessage }
 }
+
+export default useSocket
